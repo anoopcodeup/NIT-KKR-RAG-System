@@ -72,64 +72,98 @@ class RAGSystem:
         # --- END NEW: Reranker ---
             
         logger.info("RAG system initialized successfully")
+
+    def generate_query_variations(self, query: str, variation_count: int = 3) -> List[str]:
+        """
+        PRE-RETRIEVAL: Multi-Query Expansion powered by Groq (if available).
+        Returns a deduplicated list of queries including the original.
+        """
+        if not (self.use_groq and self.groq_service):
+            return [query]
+
+        prompt = f"""You are an AI assistant helping to search a university knowledge base.
+Generate {variation_count} different search queries based on the user question below.
+Return ONLY the queries separated by newlines. Do not include numbering or explanations.
+
+User Question: {query}"""
+
+        try:
+            response = self.groq_service.generate_response(prompt, max_tokens=128, temperature=0.7)
+            variations = [line.strip() for line in response.split("\n") if line.strip()]
+
+            deduped: List[str] = []
+            for cand in [query] + variations:
+                if cand not in deduped:
+                    deduped.append(cand)
+                if len(deduped) >= variation_count + 1:
+                    break
+
+            logger.info(f"Generated query variations: {deduped}")
+            return deduped
+        except Exception as e:
+            logger.warning(f"Query expansion failed: {e}. Using original query.")
+            return [query]
     
     def retrieve_relevant_documents(self, query: str, k: int = 5) -> List[Dict]:
         """
-        Retrieve and rerank relevant documents for a given query.
-        
-        Args:
-            query: User query
-            k: Number of documents to retrieve
-            
-        Returns:
-            List of relevant document chunks with metadata
+        Retrieve and rerank relevant documents for a given query using
+        multi-query expansion (pre-retrieval) and optional reranking (post-retrieval).
         """
         logger.info(f"Searching for: '{query}'")
-        
-        # 1. Retrieve (get more results than needed, e.g., 20 or 4*k)
-        initial_k = max(20, k * 4)
-        results = self.embedding_system.search(query, k=initial_k)
-        
+
+        queries = self.generate_query_variations(query)
+        initial_k = max(20, k * 2)
+        aggregated: Dict[int, Dict] = {}
+
+        for expanded_query in queries:
+            results = self.embedding_system.search(expanded_query, k=initial_k)
+            for result in results:
+                chunk_id = result.get('id')
+                if chunk_id is None:
+                    # Fall back to using hash of chunk text if ID missing
+                    chunk_id = hash(result.get('chunk_text', expanded_query))
+                    result['id'] = chunk_id
+
+                existing = aggregated.get(chunk_id)
+                current_score = result.get('similarity_score', 0.0)
+
+                if not existing or current_score > existing.get('similarity_score', 0.0):
+                    result['matched_query'] = expanded_query
+                    aggregated[chunk_id] = result
+
+        results = list(aggregated.values())
+
         if not results:
             logger.info("Found 0 chunks.")
             return []
             
-        # 2. Rerank (if model is available)
         if self.reranker:
-            logger.info(f"Reranking {len(results)} results...")
+            logger.info(f"Reranking {len(results)} candidates...")
             
-            # Create pairs of (query, chunk_text)
             pairs = [(query, result['chunk_text']) for result in results]
             
-            # Score the pairs
             try:
                 scores = self.reranker.predict(pairs)
                 
-                # Add scores back to results and sort
                 for i, result in enumerate(results):
                     result['rerank_score'] = scores[i]
                     
                 results.sort(key=lambda x: x['rerank_score'], reverse=True)
                 
-                # 3. Select the top K from the reranked list
                 final_results = results[:k]
                 logger.info(f"Found {len(final_results)} reranked results.")
                 
-                # Update similarity_score with the more accurate rerank_score for downstream use
                 for res in final_results:
-                    res['similarity_score'] = res['rerank_score']
+                    res['similarity_score'] = res.get('rerank_score', res.get('similarity_score', 0))
                     
                 return final_results
                 
             except Exception as e:
-                logger.warning(f"Reranking failed: {e}. Falling back to standard retrieval.")
-                # Fallback to standard retrieval if reranking predict fails
+                logger.warning(f"Reranking failed: {e}. Falling back to similarity scores.")
                 return results[:k]
             
-        else:
-            # Fallback to standard retrieval if no reranker
-            logger.info(f"Found {len(results)} results (no reranking).")
-            return results[:k]  # Return top k from original search
+        logger.info(f"Found {len(results)} results (no reranking).")
+        return results[:k]
     
     def format_context(self, results: List[Dict]) -> str:
         """
@@ -213,7 +247,7 @@ class RAGSystem:
         
         return response
     
-    def answer_query(self, query: str, k: int = 5) -> Dict:
+    def answer_query(self, query: str, k: int = 10) -> Dict:
         """
         Answer a user query using the RAG system.
         

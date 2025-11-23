@@ -1,0 +1,125 @@
+.header {
+  background: linear-gradient(180deg, rgba(249, 250, 251, 0.95) 0%, rgba(243, 244, 246, 0.98) 100%);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border, #ddd);
+  box-shadow: var(--shadow, 0 2px 8px rgba(0,0,0,0.05));
+  padding: 1rem 0;
+  transition: background 0.3s ease, color 0.3s ease;
+  flex-shrink: 0;
+}
+
+.app.dark .header {
+  background: #2c2c2c;
+  border-bottom: 1px solid #444;
+  backdrop-filter: none;
+}
+
+.header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.header-title h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary, #111);
+  margin-bottom: 0.125rem;
+}
+
+.app.dark .header-title h1 {
+  color: #f1f1f1;
+}
+
+.header-subtitle {
+  color: var(--text-secondary, #555);
+  font-size: 0.8125rem;
+}
+
+.app.dark .header-subtitle {
+  color: #ccc;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--background, #f1f1f1);
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  color: var(--text-secondary, #555);
+  border: 1px solid var(--border, #ddd);
+  transition: all 0.3s ease;
+}
+
+.app.dark .header-badge {
+  background: #3a3a3a;
+  color: #ccc;
+  border: 1px solid #555;
+}
+
+.header-badge:hover {
+  transform: scale(1.05);
+  cursor: default;
+}
+
+.badge-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--success, #22c55e);
+  border-radius: 50%;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.app.dark .badge-dot {
+  background: #4ade80;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.dark-mode-toggle {
+  background: var(--primary, #4f46e5);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 0.875rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  font-size: 1.25rem;
+  line-height: 1;
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.dark-mode-toggle:hover {
+  background: #6366f1;
+  transform: scale(1.05);
+}
+
+@media (max-width: 640px) {
+  .header-title h1 {
+    font-size: 1.5rem;
+  }
+}

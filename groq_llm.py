@@ -98,7 +98,6 @@ Context from NIT Kurukshetra website:
 
 Instructions:
 1. Answer the user's question based ONLY on the provided context
-2. If the context doesn't contain enough information, say so clearly
 3. Be accurate and factual - only use information from the provided context
 4. If you find relevant information, present it in a clear and organized way
 5. Include specific details like dates, requirements, procedures, etc. when available

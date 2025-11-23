@@ -1,0 +1,126 @@
+/* Root input area */
+.input-area {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border, #ddd);
+  background: var(--surface, #fff);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.app.dark .input-area {
+  background: #2c2c2c;
+  border-top: 1px solid #444;
+}
+
+/* Input container */
+.input-container {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+/* Textarea field */
+.input-field {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border, #ccc);
+  border-radius: 12px;
+  font-size: 0.9375rem;
+  font-family: inherit;
+  resize: none;
+  max-height: 120px;
+  overflow-y: auto;
+  background: var(--background, #f7f7f7);
+  color: var(--text-primary, #111);
+  line-height: 1.5;
+  transition: all 0.2s ease;
+}
+
+.app.dark .input-field {
+  background: #3a3a3a;
+  color: #f1f1f1;
+  border: 1px solid #555;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--primary-color, #4f46e5);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+.input-field:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.input-field::placeholder {
+  color: var(--text-secondary, #888);
+}
+
+/* Send button */
+.send-button {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 12px;
+  background: var(--primary-color, #4f46e5);
+  color: white;
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.app.dark .send-button {
+  background: #6366f1;
+}
+
+.send-button:hover:not(:disabled) {
+  background: var(--primary-dark, #6366f1);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg, 0 4px 12px rgba(0,0,0,0.2));
+}
+
+.send-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.send-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Loading spinner */
+.button-loading {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Input hint */
+.input-hint {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary, #555);
+  text-align: center;
+}
+
+.app.dark .input-hint {
+  color: #ccc;
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+  .input-area {
+    padding: 0.875rem 1rem;
+  }
+}

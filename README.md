@@ -2,6 +2,17 @@
 
 A complete web scraping and Retrieval-Augmented Generation (RAG) system for the NIT Kurukshetra website. This system scrapes the website, extracts text content, generates vector embeddings, and provides an interactive question-answering interface powered by Groq LLM.
 
+## 🎨 New: Web Interface
+
+This project now includes a **modern React frontend** with a beautiful chat interface and a **FastAPI backend** for seamless integration!
+
+- 💻 **React Frontend**: Built with Vite, featuring a modern chat UI
+- 🚀 **FastAPI Backend**: RESTful API with automatic documentation
+- 📱 **Responsive Design**: Works on desktop, tablet, and mobile devices
+- 🎯 **Real-time Stats**: View system statistics in real-time
+
+See [SETUP.md](SETUP.md) for complete setup instructions.
+
 ## Features
 
 - 🕷️ **Web Scraping**: Recursively scrapes NIT KKR website with BeautifulSoup
@@ -35,9 +46,28 @@ pip install -r requirements.txt
 
 **Note**: Without Groq API key, the system will use template-based responses. With Groq, you get much more intelligent and contextual answers.
 
-## Usage
+## Quick Start with Web Interface
 
-### Quick Start (Complete Pipeline)
+1. **Set up backend** (see [SETUP.md](SETUP.md) for details):
+   ```bash
+   pip install -r requirements.txt
+   python main.py embed  # If not already done
+   cd backend
+   python api.py
+   ```
+
+2. **Set up frontend** (in a new terminal):
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+
+3. **Open browser**: Visit `http://localhost:3000`
+
+For detailed setup instructions, see [SETUP.md](SETUP.md).
+
+## Usage (Command Line)
 
 Run the complete pipeline in one command:
 
@@ -99,6 +129,14 @@ python main.py stats
 
 ```
 NIT_KKR_project/
+├── backend/
+│   └── api.py              # FastAPI backend server
+├── frontend/
+│   ├── src/
+│   │   ├── components/     # React components
+│   │   ├── services/       # API service layer
+│   │   └── ...
+│   └── package.json        # Frontend dependencies
 ├── main.py                 # Main orchestration script
 ├── scraper.py              # Web scraping module
 ├── vector_embeddings.py    # Vector embedding generation
@@ -108,6 +146,7 @@ NIT_KKR_project/
 ├── setup_groq.py          # Groq API setup script
 ├── requirements.txt        # Python dependencies
 ├── README.md              # This file
+├── SETUP.md               # Complete setup guide
 ├── .env                   # Environment variables (create with setup_groq.py)
 ├── nitkkr_pages/          # Scraped HTML pages
 ├── extracted_text/         # Clean text files
