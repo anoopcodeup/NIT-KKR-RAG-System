@@ -36,6 +36,7 @@ function ChatInterface() {
         type: 'bot',
         content: response.response,
         sources: response.sources,
+        metadata: response.metadata,
         timestamp: new Date()
       }
       setMessages(prev => [...prev, botMessage])

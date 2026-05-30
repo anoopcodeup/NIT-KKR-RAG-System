@@ -87,3 +87,26 @@
 
 /* small divider */
 .stat-divider { height: 1px; background: var(--border); margin: 0.45rem 0; }
+
+.tools-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+}
+
+.tool-chip {
+  padding: 0.2rem 0.5rem;
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.tools-section {
+  flex-direction: column !important;
+  align-items: flex-start !important;
+}

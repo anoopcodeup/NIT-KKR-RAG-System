@@ -129,29 +129,19 @@ python main.py stats
 
 ```
 NIT_KKR_project/
-├── backend/
-│   └── api.py              # FastAPI backend server
-├── frontend/
-│   ├── src/
-│   │   ├── components/     # React components
-│   │   ├── services/       # API service layer
-│   │   └── ...
-│   └── package.json        # Frontend dependencies
-├── main.py                 # Main orchestration script
-├── scraper.py              # Web scraping module
-├── vector_embeddings.py    # Vector embedding generation
-├── rag_system.py           # RAG system implementation
-├── groq_llm.py            # Groq LLM service integration
-├── config.py              # Configuration management
-├── setup_groq.py          # Groq API setup script
-├── requirements.txt        # Python dependencies
-├── README.md              # This file
-├── SETUP.md               # Complete setup guide
-├── .env                   # Environment variables (create with setup_groq.py)
-├── nitkkr_pages/          # Scraped HTML pages
-├── extracted_text/         # Clean text files
-├── vector_store/           # FAISS index and metadata
-└── embeddings/             # Embedding files
+├── agentic_system/       # core agentic RAG logic
+├── backend/              # FastAPI backend server
+├── docs/                 # Documentation and implementation plans
+├── frontend/             # React frontend
+├── scripts/              # Setup and diagnostic scripts
+├── tests/                # System and unit tests
+├── main.py               # Main orchestration script
+├── agentic_app.py        # Streamlit Agentic UI
+├── streamlit_app.py      # Legacy Streamlit UI
+├── requirements.txt      # Project dependencies
+├── .env                  # Environment variables
+├── nitkkr_pages/         # Scraped content
+└── vector_store/          # FAISS index
 ```
 
 ## Configuration
