@@ -5,7 +5,7 @@ from typing import Optional, Dict, Any
 # Try to load environment variables from .env file
 try:
     from dotenv import load_dotenv  # type: ignore
-    load_dotenv()
+    load_dotenv(override=True)
 except (ImportError, ModuleNotFoundError):
     # dotenv not available, use system environment variables only
     pass

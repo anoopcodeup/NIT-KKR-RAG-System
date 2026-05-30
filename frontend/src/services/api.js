@@ -1,19 +1,23 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
 
 /**
- * Query the RAG system
+ * Query the Agentic RAG system
  * @param {string} query - The user's question
- * @param {number} k - Number of documents to retrieve (default: 5)
- * @returns {Promise<Object>} Response with answer and sources
+ * @param {string} sessionId - Optional session ID
+ * @returns {Promise<Object>} Response with answer, sources and agentic metadata
  */
-export async function queryRAG(query, k = 5) {
+export async function queryRAG(query, sessionId = null) {
   try {
     const response = await fetch(`${API_BASE_URL}/api/query`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ query, k }),
+      body: JSON.stringify({ 
+        query, 
+        session_id: sessionId,
+        stream: false 
+      }),
     })
 
     if (!response.ok) {
@@ -23,14 +27,14 @@ export async function queryRAG(query, k = 5) {
 
     return await response.json()
   } catch (error) {
-    console.error('Error querying RAG:', error)
+    console.error('Error querying Agentic RAG:', error)
     throw error
   }
 }
 
 /**
- * Get system statistics
- * @returns {Promise<Object>} System statistics
+ * Get system statistics and agent status
+ * @returns {Promise<Object>} System metrics
  */
 export async function getStats() {
   try {
@@ -48,7 +52,7 @@ export async function getStats() {
 }
 
 /**
- * Check API health
+ * Check API health and agentic core status
  * @returns {Promise<Object>} Health status
  */
 export async function checkHealth() {

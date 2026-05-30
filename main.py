@@ -42,7 +42,7 @@ def run_update(file_path: str) -> bool:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="NIT Kurukshetra RAG System")
-    parser.add_argument("command", choices=["scrape", "embed", "rag", "full", "stats", "update"], help="Command to run")
+    parser.add_argument("command", choices=["scrape", "embed", "rag", "agentic", "full", "stats", "update"], help="Command to run")
     parser.add_argument("file", nargs="?", help="File path for update command")
     args = parser.parse_args()
 
@@ -56,6 +56,19 @@ def main() -> int:
 
     if args.command == "rag":
         rag_main()
+        return 0
+
+    if args.command == "agentic":
+        from agentic_system.workflows.agentic_rag import create_agentic_rag_workflow
+        workflow = create_agentic_rag_workflow()
+        print("🧠 Agentic RAG System Initialized")
+        while True:
+            query = input("\n❓ Query (or 'exit'): ")
+            if query.lower() in ['exit', 'quit', 'q']:
+                break
+            result = workflow.invoke({"query": query})
+            print(f"\n🤖 Answer: {result['response']}")
+            print(f"📊 Trace: Intent={result['intent']}, Tools={result['tools_used']}, Time={result['execution_time']:.2f}s")
         return 0
 
     if args.command == "update":
